@@ -1,0 +1,1097 @@
+<Component ID="1189172212095" PageID="0" TemplateComponentID="0" CanBeActive="true" Version="3.1.0.0"><Description></Description><SelectedSkin>Default</SelectedSkin><DisplayName></DisplayName><Name></Name><BaseComponent Version="0"><![CDATA[//sqconldm102/iwadmin/main/livesite/component/WORKAREA/Content/GE-Money/Core/Header_Full.component]]></BaseComponent><ContainerProperties ID="" locked="false"><FixedLayoutArea ID="" index="0"/><CacheTime>-1</CacheTime><BGColor>#FFFFFF</BGColor><Background/><Width>740</Width><Height>140</Height><Top>0</Top><Left>0</Left><ZIndex>0</ZIndex><RenderInRuntime>true</RenderInRuntime></ContainerProperties><InternalProperties/><Locks><ContainerProperties locked="false" Changed="false"/><Properties locked="false" Changed="false"/><Data locked="false" Changed="false"/></Locks><Properties ComponentID="1189172212095"/><Data> 
+  <Datum ID="Header" Name="Header" Type="DCR"> 
+    <DCR Category="Core_Components" Type="Header_Full">templatedata/Core_Components/Header_Full/data/default.xml</DCR> 
+  </Datum>  
+  <External> 
+    <Object Scope="local">com.interwoven.livesite.gemoney.LinkNavigation</Object>  
+    <Method>topNavigationXMLDocument</Method> 
+  </External> 
+</Data><Stylesheet Type="1" Default="false" PageType="" RequiredPageLayout="" ContentType="text/html"><Name>preview</Name><XSL>&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;!-- Skin: Default Skin (Default Browser Type) --&gt;
+&lt;!-- 
+################################################################################### 
+Name of Component: Header_Full
+Description:This XSL is used for Header Preview Component.
+Layout:Preview Layout
+DCT Category:-Core_Components
+DCT Datatype:-Header_Full
+Author: Subramanian Selvaraj
+Classification:GE-Confidential
+History: Balaveera|18-Jun-08|Updated the Form Tag and Search Apply template 
+         Selvaraj|05-Aug-08|Updated the comment and fixed Tab issue
+################################################################################### 
+--&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/xsl/HTMLTemplates.xsl"/&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/xsl/StringTemplates.xsl"/&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/custom/gemoney/Component.xsl"/&gt;
+
+  &lt;xsl:variable name="livesitepage" select="/Properties/Data/External/Parameters/Datum[@Name='iw-ls-page-name']" /&gt; 
+  &lt;xsl:variable name="livesitepath" select="/Properties/Data/External/Parameters/Datum[@Name='vpath']" /&gt;
+  &lt;xsl:variable name="firstLevel" select="''" /&gt;
+  &lt;xsl:template match="/"&gt;
+              &lt;xsl:apply-templates select="/Properties/Data"&gt;
+              &lt;/xsl:apply-templates&gt;
+  &lt;/xsl:template&gt;
+
+   &lt;xsl:template match="Data"&gt;
+          &lt;!-- First Level of Navigation from the Sitemap Data Starts  --&gt;
+
+           &lt;div class="headerWrapper" &gt;
+             &lt;div class="siteNavigation"&gt;
+                &lt;ul&gt;
+                   &lt;xsl:variable name="path"&gt; &lt;xsl:call-template name="substring-after-last"&gt;
+  			&lt;xsl:with-param name="input" select="$livesitepath"/&gt;
+  			&lt;xsl:with-param name="substr" select="'.'"/&gt;
+  		&lt;/xsl:call-template&gt; &lt;/xsl:variable&gt;
+                &lt;xsl:choose&gt;
+                &lt;xsl:when test="$path = 'component' or $path = 'template' "&gt;
+
+                        &lt;!--First level data when preview in template and component --&gt;
+			       &lt;xsl:apply-templates select="Result/site-map"&gt;
+			       &lt;/xsl:apply-templates&gt;
+                &lt;/xsl:when&gt;
+                &lt;xsl:otherwise&gt;
+
+                        &lt;!--First level data when preview in page --&gt;
+                         &lt;xsl:for-each select="/Properties/Data/Result/result/node"&gt;
+                                &lt;xsl:if test="last()!=1"&gt;
+
+                          &lt;!-- Tab when selected starts--&gt;
+                                &lt;xsl:choose&gt;
+                                &lt;xsl:when test="url = '' and @IsSelected != 'true'"&gt;
+                                &lt;li &gt;&lt;a&gt;
+				&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+				&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                              &lt;xsl:when test="url = '' and @IsSelected = 'true'"&gt;
+                                &lt;li class="selected last"&gt;&lt;a &gt;
+				&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+				&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+
+                                &lt;xsl:when test="@ IsSelected = 'true'"&gt;
+                                &lt;li class="selected last"&gt;&lt;a &gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                                &lt;xsl:when test="@ IsSelected = 'true' and url/@type = 'page'"&gt;
+	                       	&lt;li class="selected last"&gt;&lt;a &gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+                                                 &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                                 &lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+                                         &lt;xsl:if test="not(link/popup)"&gt;
+                                                 &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+                                                 &lt;/xsl:attribute&gt;
+                                                 &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+				     &lt;xsl:value-of select="label"/&gt;
+				&lt;/a&gt;
+                                    &lt;/li&gt;
+	                      &lt;/xsl:when&gt;
+                          &lt;!-- Tab when selected ends--&gt;
+
+                          &lt;!-- Tab when not selected starts--&gt;
+                                &lt;xsl:when test="@ IsSelected != 'true'"&gt;
+                                &lt;li&gt;&lt;a&gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                                &lt;xsl:when test="@ IsSelected != 'true' and url/@type = 'page'"&gt;
+	                       	&lt;li&gt;&lt;a&gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+                                                 &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                                 &lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+                                         &lt;xsl:if test="not(link/popup)"&gt;
+                                                 &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+                                                 &lt;/xsl:attribute&gt;
+                                                 &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+				     &lt;xsl:value-of select="label"/&gt;
+				&lt;/a&gt;
+                                    &lt;/li&gt;
+	                      &lt;/xsl:when&gt;  &lt;!-- Tab when not selected ends--&gt;
+	                      &lt;xsl:when test="url/@type = 'url'"&gt;
+	                      	&lt;li&gt;&lt;a &gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+        			                  &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                     	&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+			              &lt;xsl:if test="not(link/popup)"&gt;
+                            		&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+                                              &lt;/xsl:attribute&gt;
+			                   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;							   			
+                                         	&lt;xsl:value-of select="label" /&gt;
+				&lt;/a&gt;&lt;/li&gt;
+	                      &lt;/xsl:when&gt;
+                               &lt;/xsl:choose&gt;
+
+                        
+                               &lt;/xsl:if&gt;
+                        &lt;/xsl:for-each&gt;
+                &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+
+          &lt;!-- First Level of Navigation from the Sitemap Data Ends --&gt;
+
+         &lt;!-- Data from the DCR for the Header Component Starts --&gt;
+	&lt;xsl:apply-templates select="Datum/DCR/Document"&gt;
+	&lt;/xsl:apply-templates&gt;
+
+         &lt;!-- Data from the DCR for the Header Component Ends --&gt;
+
+         &lt;!-- Data from Site Map for the Navigation Details Only Second Level Navigation here displayed --&gt;
+          &lt;div class="topNavigation"&gt;
+            &lt;ul&gt;
+                   &lt;xsl:variable name="path"&gt; &lt;xsl:call-template name="substring-after-last"&gt;
+  			&lt;xsl:with-param name="input" select="$livesitepath"/&gt;
+  			&lt;xsl:with-param name="substr" select="'.'"/&gt;
+  		&lt;/xsl:call-template&gt; &lt;/xsl:variable&gt;
+                &lt;xsl:choose&gt;
+                &lt;xsl:when test="$path = 'component' or $path = 'template' "&gt;
+
+                         &lt;!--Second level data when preview in template and component --&gt;
+                     &lt;!-- &lt;xsl:call-template name="MainMenu"&gt;
+                     &lt;/xsl:call-template&gt; --&gt;
+                     &lt;xsl:apply-templates select="/Properties/Data/Result"/&gt;
+
+                &lt;/xsl:when&gt;
+                &lt;xsl:otherwise&gt;
+
+                         &lt;!--Second level data when preview in page --&gt;
+                       &lt;xsl:variable name="livesitepage" select="/Properties/Data/External/Parameters/Datum[@Name='iw-ls-page-name']" /&gt; 
+                         &lt;xsl:variable name="strpage"&gt;
+                               &lt;xsl:value-of select="concat(substring-before($livesitepage,'/includes/header/'),'/')" /&gt;
+                               &lt;/xsl:variable&gt;
+                               &lt;xsl:variable name="livesitepage"&gt;
+                               &lt;xsl:value-of select="substring-after($livesitepage,'/includes/header/')" /&gt;
+                               &lt;/xsl:variable&gt;
+                               &lt;xsl:variable name="livesitepage"&gt;
+                               &lt;xsl:value-of select="concat($strpage,$livesitepage)" /&gt;
+                               &lt;/xsl:variable&gt;
+
+                          &lt;xsl:for-each select="/Properties/Data/Result/result/node"&gt; 
+                                 &lt;!-- if first level node is selected page then display only second level navigation without highlight--&gt;
+                                &lt;xsl:choose&gt;
+                                &lt;xsl:when test="@IsSelected = 'true' and $livesitepage = url"&gt;
+                                &lt;xsl:for-each select="node"&gt; 
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="total"&gt;&lt;xsl:value-of select="number(740) - number(last() - 1) * number(4) + number(2)" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="( number(740) div number(last()) ) - number(4)" /&gt; &lt;/xsl:variable&gt;
+								   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="number(740) - number(($width + 4) * number(last() - 1 ))" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="$width" /&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="concat(floor($width),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="concat(round($lastItem),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="stringLength" select="round($stringLength)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="round($stringWidth)" /&gt;
+                                   &lt;xsl:variable name="stringLength" &gt;
+                                                 &lt;xsl:call-template name="findLength"&gt;
+                                                      &lt;xsl:with-param name="strLabel" select="label" /&gt;
+                                                      &lt;xsl:with-param name="strTotal" select="'0'" /&gt;
+                                                 &lt;/xsl:call-template&gt;
+                                   &lt;/xsl:variable&gt;
+                                                      &lt;li&gt;
+                                                      &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last()"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'last'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 "&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'first'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:otherwise&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:otherwise&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt; 
+
+                                                               &lt;!-- If url is equals page--&gt;
+
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+									  &lt;xsl:if test="link/popup"&gt;
+											  &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+											  &lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+									  &lt;xsl:if test="not(link/popup)"&gt;
+											  &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+											  &lt;/xsl:attribute&gt;
+											  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt; 
+
+                                                               &lt;!-- If url is equals others--&gt;
+
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+									  &lt;xsl:if test="link/popup"&gt;
+											  &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+										   &lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+									  &lt;xsl:if test="not(link/popup)"&gt;
+										   &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+											&lt;/xsl:attribute&gt;
+											  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;/xsl:choose&gt; 
+                            				&lt;/li&gt;
+                                &lt;/xsl:for-each&gt; 
+                                &lt;/xsl:when&gt;
+                                 &lt;!-- Second level node for selected item--&gt;
+                                &lt;xsl:when test="@IsSelected = 'true'"&gt;
+                                &lt;xsl:for-each select="node"&gt; 
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="total"&gt;&lt;xsl:value-of select="number(740) - number(last() - 1) * number(4)" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="( number(740) div number(last()) ) - number(4)" /&gt; &lt;/xsl:variable&gt;
+									&lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="number(740) - number(($width + 4) * number(last() - 1 ))" /&gt; &lt;/xsl:variable&gt;
+
+
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="$width" /&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="concat(floor($width),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="concat(round($lastItem),'px;')" /&gt;&lt;/xsl:variable&gt;
+
+                                   &lt;xsl:variable name="stringLength" select="round($stringLength)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="round($stringWidth)" /&gt;
+                                   &lt;xsl:variable name="stringLength" &gt;
+                                                 &lt;xsl:call-template name="findLength"&gt;
+                                                      &lt;xsl:with-param name="strLabel" select="label" /&gt;
+                                                      &lt;xsl:with-param name="strTotal" select="'0'" /&gt;
+                                                 &lt;/xsl:call-template&gt;
+                                   &lt;/xsl:variable&gt;
+					&lt;xsl:choose&gt;
+                                                  	&lt;xsl:when test="@IsSelected = 'true'"&gt;
+							&lt;li&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last() and $stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi last&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = last() and $stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi last&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 and $stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi first&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 and $stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi first&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="$stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+
+                                                               &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt;
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+   
+							  &lt;xsl:if test="link/popup"&gt;
+								   &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+								   &lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+							  &lt;xsl:if test="not(link/popup)"&gt;
+									  &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+									  &lt;/xsl:attribute&gt;
+									  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+
+                                                                  &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt;
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+								  &lt;xsl:if test="link/popup"&gt;
+										  &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+										  &lt;/xsl:attribute&gt;
+								  &lt;/xsl:if&gt;
+								  &lt;xsl:if test="not(link/popup)"&gt;
+										  &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+										  &lt;/xsl:attribute&gt;
+										  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+								  &lt;/xsl:if&gt;
+                                                                  &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;/li&gt;
+						&lt;/xsl:when&gt;
+          					&lt;xsl:otherwise&gt;
+                                                      &lt;!-- Second level not selected item--&gt;
+
+                                                      &lt;li&gt;
+                                                      &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last()"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'last'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 "&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'first'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:otherwise&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:otherwise&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							   &lt;xsl:if test="link/popup"&gt;
+									   &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+									   &lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							   &lt;xsl:if test="not(link/popup)"&gt;
+									   &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+									   &lt;/xsl:attribute&gt;
+									   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							   &lt;xsl:if test="link/popup"&gt;
+									   &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+									   &lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							   &lt;xsl:if test="not(link/popup)"&gt;
+									   &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+									   &lt;/xsl:attribute&gt;
+									   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;/xsl:choose&gt; 
+                            				&lt;/li&gt;
+						&lt;/xsl:otherwise&gt;
+					&lt;/xsl:choose&gt;
+                                     &lt;/xsl:for-each&gt; 
+                                &lt;/xsl:when&gt;
+                                &lt;/xsl:choose&gt;
+                           &lt;/xsl:for-each&gt; 
+                         &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;
+          &lt;!--  Top Navigation Ends Here --&gt;
+&lt;/div&gt;
+&lt;/xsl:template&gt;
+&lt;!--  Starts for the First Level Node apply templates. Get the data from the sitemap and displayed --&gt;
+
+&lt;xsl:template match="site-map"&gt;
+	&lt;xsl:for-each select="segment/node[@visible-in-sitemap='true']"&gt;
+		&lt;xsl:if test="last()!=1"&gt;
+			&lt;xsl:choose&gt;
+				&lt;xsl:when test="position() = last()"&gt;
+					&lt;li class="selected last"&gt;&lt;a &gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+				&lt;/xsl:when&gt;
+				&lt;xsl:otherwise&gt;
+					&lt;li&gt;&lt;a &gt;
+						   &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						   &lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+				&lt;/xsl:otherwise&gt;
+			&lt;/xsl:choose&gt;
+		&lt;/xsl:if&gt;
+	&lt;/xsl:for-each&gt;
+&lt;/xsl:template&gt;
+&lt;!--  Ends for the First Level Node apply templates. Get the data from the sitemap and displayed --&gt;
+
+&lt;!-- Apply Templates starts Document from the DCR --&gt;
+&lt;xsl:template match="Document"&gt;
+	&lt;div class="headerContainer"&gt;
+		&lt;div class="logoContainer"&gt;
+			&lt;span in-context-edit="{/Properties/Data/Datum[@Name='Header']/@ID}" dcr-item-paths="/Document/Logo" &gt;
+			&lt;xsl:apply-templates select="Logo"&gt;
+			&lt;/xsl:apply-templates&gt;
+			&lt;/span&gt;
+		&lt;/div&gt;
+		&lt;div class="infoContainer"&gt;
+			&lt;div class="searchContainer"&gt;
+				&lt;form id="searchForm" method="GET" name="searchForm" type="external"&gt;
+                                           &lt;xsl:attribute name="action"&gt;&lt;xsl:value-of select="Search/URL"/&gt;&lt;/xsl:attribute&gt;
+				&lt;span in-context-edit="{/Properties/Data/Datum[@Name='Header']/@ID}" dcr-item-paths="/Document/Search" &gt;
+				&lt;xsl:apply-templates select="Search"&gt;
+           		&lt;/xsl:apply-templates&gt;
+				&lt;/span&gt;
+				&lt;/form&gt;
+			&lt;/div&gt;
+			&lt;xsl:if test="Button != '' "&gt;
+				&lt;div class="buttonContainer"&gt;
+				&lt;xsl:apply-templates select="Button"&gt;
+							&lt;xsl:with-param name="path"&gt;/Document/Button&lt;/xsl:with-param&gt;
+				    &lt;xsl:with-param name="dcr_id"  select="/Properties/Data/Datum[@Name='Header']/@ID"/&gt;
+		       		&lt;/xsl:apply-templates&gt;
+				&lt;/div&gt;
+			&lt;/xsl:if&gt;
+			&lt;div class="infoContainerLogin"&gt;
+				&lt;p class="infoContainerP"&gt;
+			  &lt;xsl:call-template name="Utility"&gt;
+                                   &lt;xsl:with-param name="utilityContainer" select="UtilityNavigation"/&gt;
+                              &lt;/xsl:call-template&gt;
+				&lt;/p&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/xsl:template&gt;
+&lt;!-- Apply Templates Ends Document from the DCR --&gt;
+
+&lt;/xsl:stylesheet&gt;</XSL></Stylesheet><Stylesheet Type="1" Default="true" PageType="htmlQuirksMode" RequiredPageLayout="table-layout" ContentType="text/html"><Name>Default</Name><XSL>&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;!-- Skin: Default Skin (Default Browser Type) --&gt;
+&lt;!-- 
+################################################################################### 
+Name of Component: Header_Full
+Description:This XSL is used for Header Preview Component. 
+Layout:Default Layout
+DCT Category:-Core_Components
+DCT Datatype:-Header_Full
+Author: Subramanian Selvaraj
+Classification:GE-Confidential
+History: Balaveera|18-Jun-08|Updated the Form Tag and Search Apply template 
+         Selvaraj|05-Aug-08|Updated the comment and fixed Tab issue
+################################################################################### 
+--&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/xsl/HTMLTemplates.xsl"/&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/xsl/StringTemplates.xsl"/&gt;
+  &lt;xsl:include href="http://www.interwoven.com/livesite/custom/gemoney/Component.xsl"/&gt;
+
+  &lt;xsl:variable name="livesitepage" select="/Properties/Data/External/Parameters/Datum[@Name='iw-ls-page-name']" /&gt; 
+  &lt;xsl:variable name="livesitepath" select="/Properties/Data/External/Parameters/Datum[@Name='vpath']" /&gt;
+  &lt;xsl:variable name="firstLevel" select="''" /&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;xsl:choose&gt;   
+         &lt;xsl:when test="/Properties[@Admin='true']"&gt;
+
+         &lt;!--Preview Mode --&gt;
+              &lt;xsl:apply-templates select="/Properties/Data"&gt;
+             &lt;/xsl:apply-templates&gt;
+
+    &lt;/xsl:when&gt;
+    &lt;xsl:otherwise&gt;
+
+         &lt;!--Generate HTML Mode --&gt;
+         &lt;xsl:variable name="livesitepage" select="/Properties/Data/External/Parameters/Datum[@Name='iw-ls-page-name']" /&gt;
+         &lt;xsl:variable name="varInclude"&gt;
+         &lt;xsl:value-of select="concat(substring-before($livesitepage,'/'), '/includes/header/')" /&gt;
+         &lt;/xsl:variable&gt;
+         &lt;xsl:variable name="varInclude"&gt;
+         &lt;xsl:value-of select="concat($varInclude, substring-after($livesitepage,'/'))" /&gt;
+         &lt;/xsl:variable&gt;
+         &lt;xsl:variable name="varInclude"&gt;
+         &lt;xsl:value-of select="concat($varInclude, '.html')" /&gt;
+         &lt;/xsl:variable&gt;
+         &lt;xsl:comment&gt;#include virtual="$URL_PREFIX/&lt;xsl:value-of select="$varInclude" /&gt;"&lt;/xsl:comment&gt;
+
+   &lt;/xsl:otherwise&gt;
+   &lt;/xsl:choose&gt;
+    
+  &lt;/xsl:template&gt;
+
+  &lt;xsl:template match="Data"&gt;
+          &lt;!-- First Level of Navigation from the Sitemap Data Starts  --&gt;
+
+           &lt;div class="headerWrapper" &gt;
+             &lt;div class="siteNavigation"&gt;
+                &lt;ul&gt;
+                   &lt;xsl:variable name="path"&gt; &lt;xsl:call-template name="substring-after-last"&gt;
+  			&lt;xsl:with-param name="input" select="$livesitepath"/&gt;
+  			&lt;xsl:with-param name="substr" select="'.'"/&gt;
+  		&lt;/xsl:call-template&gt; &lt;/xsl:variable&gt;
+                &lt;xsl:choose&gt;
+                &lt;xsl:when test="$path = 'component' or $path = 'template' "&gt;
+
+                        &lt;!--First level data when preview in template and component --&gt;
+			       &lt;xsl:apply-templates select="Result/site-map"&gt;
+			       &lt;/xsl:apply-templates&gt;
+                &lt;/xsl:when&gt;
+                &lt;xsl:otherwise&gt;
+
+                        &lt;!--First level data when preview in page --&gt;
+                         &lt;xsl:for-each select="/Properties/Data/Result/result/node"&gt;
+                                &lt;xsl:if test="last()!=1"&gt;
+
+                          &lt;!-- Tab when selected starts--&gt;
+                                &lt;xsl:choose&gt;
+                                &lt;xsl:when test="url = '' and @IsSelected != 'true'"&gt;
+                                &lt;li &gt;&lt;a&gt;
+				&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+				&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                              &lt;xsl:when test="url = '' and @IsSelected = 'true'"&gt;
+                                &lt;li class="selected last"&gt;&lt;a &gt;
+				&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+				&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+
+                                &lt;xsl:when test="@ IsSelected = 'true'"&gt;
+                                &lt;li class="selected last"&gt;&lt;a &gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                                &lt;xsl:when test="@ IsSelected = 'true' and url/@type = 'page'"&gt;
+	                       	&lt;li class="selected last"&gt;&lt;a &gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+                                                 &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                                 &lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+                                         &lt;xsl:if test="not(link/popup)"&gt;
+                                                 &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+                                                 &lt;/xsl:attribute&gt;
+                                                 &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+				     &lt;xsl:value-of select="label"/&gt;
+				&lt;/a&gt;
+                                    &lt;/li&gt;
+	                      &lt;/xsl:when&gt;
+                          &lt;!-- Tab when selected ends--&gt;
+
+                          &lt;!-- Tab when not selected starts--&gt;
+                                &lt;xsl:when test="@ IsSelected != 'true'"&gt;
+                                &lt;li&gt;&lt;a&gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+                                &lt;/xsl:when&gt;
+                                &lt;xsl:when test="@ IsSelected != 'true' and url/@type = 'page'"&gt;
+	                       	&lt;li&gt;&lt;a&gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+                                                 &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                                 &lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+                                         &lt;xsl:if test="not(link/popup)"&gt;
+                                                 &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+                                                 &lt;/xsl:attribute&gt;
+                                                 &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+				     &lt;xsl:value-of select="label"/&gt;
+				&lt;/a&gt;
+                                    &lt;/li&gt;
+	                      &lt;/xsl:when&gt;&lt;!-- Tab when not selected ends--&gt;
+
+	                      &lt;xsl:when test="url/@type = 'url'"&gt;
+	                      	&lt;li&gt;&lt;a &gt;
+                                         &lt;xsl:if test="link/popup"&gt;
+        			                  &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+                                     	&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;
+			              &lt;xsl:if test="not(link/popup)"&gt;
+                            		&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+                                              &lt;/xsl:attribute&gt;
+			                   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+                                         &lt;/xsl:if&gt;							   			
+                                         	&lt;xsl:value-of select="label" /&gt;
+				&lt;/a&gt;&lt;/li&gt;
+	                      &lt;/xsl:when&gt;
+                               &lt;/xsl:choose&gt;
+
+                                                         &lt;/xsl:if&gt;
+                        &lt;/xsl:for-each&gt;
+                &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+
+          &lt;!-- First Level of Navigation from the Sitemap Data Ends --&gt;
+
+         &lt;!-- Data from the DCR for the Header Component Starts --&gt;
+	&lt;xsl:apply-templates select="Datum/DCR/Document"&gt;
+	&lt;/xsl:apply-templates&gt;
+
+         &lt;!-- Data from the DCR for the Header Component Ends --&gt;
+
+         &lt;!-- Data from Site Map for the Navigation Details Only Second Level Navigation here displayed --&gt;
+          &lt;div class="topNavigation"&gt;
+            &lt;ul&gt;
+                   &lt;xsl:variable name="path"&gt; &lt;xsl:call-template name="substring-after-last"&gt;
+  			&lt;xsl:with-param name="input" select="$livesitepath"/&gt;
+  			&lt;xsl:with-param name="substr" select="'.'"/&gt;
+  		&lt;/xsl:call-template&gt; &lt;/xsl:variable&gt;
+                &lt;xsl:choose&gt;
+                &lt;xsl:when test="$path = 'component' or $path = 'template' "&gt;
+
+                         &lt;!--Second level data when preview in template and component --&gt;
+                     &lt;!-- &lt;xsl:call-template name="MainMenu"&gt;
+                     &lt;/xsl:call-template&gt; --&gt;
+                     &lt;xsl:apply-templates select="/Properties/Data/Result"/&gt;
+
+                &lt;/xsl:when&gt;
+                &lt;xsl:otherwise&gt;
+
+                         &lt;!--Second level data when preview in page --&gt;
+                       &lt;xsl:variable name="livesitepage" select="/Properties/Data/External/Parameters/Datum[@Name='iw-ls-page-name']" /&gt; 
+                          &lt;xsl:for-each select="/Properties/Data/Result/result/node"&gt; 
+                                 &lt;!-- if first level node is selected page then display only second level navigation without highlight--&gt;
+                                &lt;xsl:choose&gt;
+                                &lt;xsl:when test="@IsSelected = 'true' and $livesitepage = url"&gt;
+                                &lt;xsl:for-each select="node"&gt; 
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="total"&gt;&lt;xsl:value-of select="number(740) - number(last() - 1) * number(4) + number(2)" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="( number(740) div number(last()) ) - number(4)" /&gt; &lt;/xsl:variable&gt;
+								   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="number(740) - number(($width + 4) * number(last() - 1 ))" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="$width" /&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="concat(floor($width),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="concat(round($lastItem),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="stringLength" select="round($stringLength)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="round($stringWidth)" /&gt;
+                                   &lt;xsl:variable name="stringLength" &gt;
+                                                 &lt;xsl:call-template name="findLength"&gt;
+                                                      &lt;xsl:with-param name="strLabel" select="label" /&gt;
+                                                      &lt;xsl:with-param name="strTotal" select="'0'" /&gt;
+                                                 &lt;/xsl:call-template&gt;
+                                   &lt;/xsl:variable&gt;
+                                                      &lt;li&gt;
+                                                      &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last()"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'last'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 "&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'first'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:otherwise&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:otherwise&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt; 
+
+                                                               &lt;!-- If url is equals page--&gt;
+
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+									  &lt;xsl:if test="link/popup"&gt;
+											  &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+											  &lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+									  &lt;xsl:if test="not(link/popup)"&gt;
+											  &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+											  &lt;/xsl:attribute&gt;
+											  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt; 
+
+                                                               &lt;!-- If url is equals others--&gt;
+
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+									  &lt;xsl:if test="link/popup"&gt;
+											  &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+										   &lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+									  &lt;xsl:if test="not(link/popup)"&gt;
+										   &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+											&lt;/xsl:attribute&gt;
+											  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+									  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;/xsl:choose&gt; 
+                            				&lt;/li&gt;
+                                &lt;/xsl:for-each&gt; 
+                                &lt;/xsl:when&gt;
+                                 &lt;!-- Second level node for selected item--&gt;
+                                &lt;xsl:when test="@IsSelected = 'true'"&gt;
+                                &lt;xsl:for-each select="node"&gt; 
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="total"&gt;&lt;xsl:value-of select="number(740) - number(last() - 1) * number(4)" /&gt; &lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="( number(740) div number(last()) ) - number(4)" /&gt; &lt;/xsl:variable&gt;
+									&lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="number(740) - number(($width + 4) * number(last() - 1 ))" /&gt; &lt;/xsl:variable&gt;
+
+
+                                   &lt;xsl:variable name="stringLength" select="string-length(label)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="$width" /&gt;
+                                   &lt;xsl:variable name="width"&gt;&lt;xsl:value-of select="concat(floor($width),'px;')" /&gt;&lt;/xsl:variable&gt;
+                                   &lt;xsl:variable name="lastItem"&gt;&lt;xsl:value-of select="concat(round($lastItem),'px;')" /&gt;&lt;/xsl:variable&gt;
+
+                                   &lt;xsl:variable name="stringLength" select="round($stringLength)" /&gt;
+                                   &lt;xsl:variable name="stringWidth" select="round($stringWidth)" /&gt;
+                                   &lt;xsl:variable name="stringLength" &gt;
+                                                 &lt;xsl:call-template name="findLength"&gt;
+                                                      &lt;xsl:with-param name="strLabel" select="label" /&gt;
+                                                      &lt;xsl:with-param name="strTotal" select="'0'" /&gt;
+                                                 &lt;/xsl:call-template&gt;
+                                   &lt;/xsl:variable&gt;
+					&lt;xsl:choose&gt;
+                                                  	&lt;xsl:when test="@IsSelected = 'true'"&gt;
+							&lt;li&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last() and $stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi last&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = last() and $stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi last&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 and $stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi first&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 and $stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi first&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSingleSelectedTabLi&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="$stringLength &amp;gt; $stringWidth"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;headerSelectedTabLi&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+
+                                                               &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt;
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+   
+							  &lt;xsl:if test="link/popup"&gt;
+								   &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+								   &lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+							  &lt;xsl:if test="not(link/popup)"&gt;
+									  &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+									  &lt;/xsl:attribute&gt;
+									  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+
+                                                                  &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt;
+                 						&lt;a&gt;
+							&lt;xsl:choose&gt;
+							&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:when&gt;						
+							&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerSelectedTab&lt;/xsl:attribute&gt;			
+							&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+								  &lt;xsl:if test="link/popup"&gt;
+										  &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+										  &lt;/xsl:attribute&gt;
+								  &lt;/xsl:if&gt;
+								  &lt;xsl:if test="not(link/popup)"&gt;
+										  &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+										  &lt;/xsl:attribute&gt;
+										  &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+								  &lt;/xsl:if&gt;
+                                                                  &lt;xsl:value-of select="label"/&gt;&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;/li&gt;
+						&lt;/xsl:when&gt;
+          					&lt;xsl:otherwise&gt;
+                                                      &lt;!-- Second level not selected item--&gt;
+
+                                                      &lt;li&gt;
+                                                      &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="position() = last()"&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$lastItem)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'last'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="position() = 1 "&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;xsl:attribute name="class"&gt;&lt;xsl:value-of select="'first'" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:otherwise&gt;
+                                                               &lt;xsl:attribute name="style"&gt;&lt;xsl:value-of select="concat('width:',$width)" /&gt;&lt;/xsl:attribute&gt;
+                                                               &lt;/xsl:otherwise&gt;
+                                                               &lt;/xsl:choose&gt;
+                                                               &lt;xsl:choose&gt;
+                                                               &lt;xsl:when test="url = ''"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							&lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="'#'"/&gt;&lt;/xsl:attribute&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt;
+                                                               &lt;xsl:when test="url/@type = 'page'"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							   &lt;xsl:if test="link/popup"&gt;
+									   &lt;xsl:attribute name="onclick"&gt;window.open('$PAGE_LINK[&lt;xsl:value-of select="url"/&gt;]&lt;xsl:text/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+									   &lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							   &lt;xsl:if test="not(link/popup)"&gt;
+									   &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="concat(url,'.page')" /&gt;
+									   &lt;/xsl:attribute&gt;
+									   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							  &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;xsl:when test="url/@type = 'url'"&gt; 
+ 							&lt;a&gt;
+							&lt;xsl:choose&gt;
+								&lt;xsl:when test="$stringLength &amp;lt; $stringWidth"&gt;
+								&lt;xsl:attribute name="class"&gt;headerSingleTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:when&gt;						
+								&lt;xsl:otherwise&gt;
+								&lt;xsl:attribute name="class"&gt;headerTab&lt;/xsl:attribute&gt;			
+								&lt;/xsl:otherwise&gt;
+							&lt;/xsl:choose&gt;
+							   &lt;xsl:if test="link/popup"&gt;
+									   &lt;xsl:attribute name="onclick"&gt;window.open('&lt;xsl:value-of select="url"/&gt;', '&lt;xsl:value-of select="link/popup/targetWindowName"/&gt;', '&lt;xsl:value-of select="link/popup/windowFeatures"/&gt;') 
+									   &lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							   &lt;xsl:if test="not(link/popup)"&gt;
+									   &lt;xsl:attribute name="href"&gt;&lt;xsl:value-of select="concat(url,'')" /&gt;
+									   &lt;/xsl:attribute&gt;
+									   &lt;xsl:attribute name="target"&gt;&lt;xsl:value-of select="url/@target"/&gt;&lt;/xsl:attribute&gt;
+							   &lt;/xsl:if&gt;
+							&lt;xsl:value-of select="label"/&gt;
+							&lt;/a&gt;
+                                                               &lt;/xsl:when&gt; 
+                                                               &lt;/xsl:choose&gt; 
+                            				&lt;/li&gt;
+						&lt;/xsl:otherwise&gt;
+					&lt;/xsl:choose&gt;
+                                     &lt;/xsl:for-each&gt; 
+                                &lt;/xsl:when&gt;
+                                &lt;/xsl:choose&gt;
+                           &lt;/xsl:for-each&gt; 
+                         &lt;/xsl:otherwise&gt;
+                &lt;/xsl:choose&gt;
+            &lt;/ul&gt;
+          &lt;/div&gt;
+          &lt;!--  Top Navigation Ends Here --&gt;
+&lt;/div&gt;
+&lt;/xsl:template&gt;
+
+&lt;!--  Starts for the First Level Node apply templates. Get the data from the sitemap and displayed --&gt;
+
+&lt;xsl:template match="site-map"&gt;
+	&lt;xsl:for-each select="segment/node[@visible-in-sitemap='true']"&gt;
+		&lt;xsl:if test="last()!=1"&gt;
+			&lt;xsl:choose&gt;
+				&lt;xsl:when test="position() = last()"&gt;
+					&lt;li class="selected last"&gt;&lt;a &gt;
+						&lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						&lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+				&lt;/xsl:when&gt;
+				&lt;xsl:otherwise&gt;
+					&lt;li&gt;&lt;a &gt;
+						   &lt;xsl:attribute name="href"&gt;/&lt;xsl:value-of select="url"/&gt;.&lt;xsl:value-of select="extension"/&gt;&lt;/xsl:attribute&gt;
+						   &lt;xsl:value-of select="label" /&gt;&lt;/a&gt;&lt;/li&gt;
+				&lt;/xsl:otherwise&gt;
+			&lt;/xsl:choose&gt;
+		&lt;/xsl:if&gt;
+	&lt;/xsl:for-each&gt;
+&lt;/xsl:template&gt;
+&lt;!--  Ends for the First Level Node apply templates. Get the data from the sitemap and displayed --&gt;
+
+&lt;!-- Apply Templates starts Document from the DCR --&gt;
+&lt;xsl:template match="Document"&gt;
+	&lt;div class="headerContainer"&gt;
+		&lt;div class="logoContainer"&gt;
+			&lt;span in-context-edit="{/Properties/Data/Datum[@Name='Header']/@ID}" dcr-item-paths="/Document/Logo" &gt;
+			&lt;xsl:apply-templates select="Logo"&gt;
+			&lt;/xsl:apply-templates&gt;
+			&lt;/span&gt;
+		&lt;/div&gt;
+		&lt;div class="infoContainer"&gt;
+			&lt;div class="searchContainer"&gt;
+ 		         &lt;form  id="searchForm" method="GET" name="searchForm" type="external"&gt;
+				&lt;xsl:attribute name="action"&gt;&lt;xsl:value-of select="Search/URL"/&gt;&lt;/xsl:attribute&gt;
+				&lt;span in-context-edit="{/Properties/Data/Datum[@Name='Header']/@ID}" dcr-item-paths="/Document/Search" &gt;
+				&lt;xsl:apply-templates select="Search"&gt;
+           		&lt;/xsl:apply-templates&gt;
+				&lt;/span&gt;
+				&lt;/form&gt;
+			&lt;/div&gt;
+			&lt;xsl:if test="Button != '' "&gt;
+				&lt;div class="buttonContainer"&gt;
+				&lt;xsl:apply-templates select="Button"&gt;
+							&lt;xsl:with-param name="path"&gt;/Document/Button&lt;/xsl:with-param&gt;
+				    &lt;xsl:with-param name="dcr_id"  select="/Properties/Data/Datum[@Name='Header']/@ID"/&gt;
+		       		&lt;/xsl:apply-templates&gt;
+				&lt;/div&gt;
+			&lt;/xsl:if&gt;
+			&lt;div class="infoContainerLogin"&gt;
+				&lt;p class="infoContainerP"&gt;
+			  &lt;xsl:call-template name="Utility"&gt;
+                                   &lt;xsl:with-param name="utilityContainer" select="UtilityNavigation"/&gt;
+                              &lt;/xsl:call-template&gt;
+				&lt;/p&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/xsl:template&gt;
+&lt;!-- Apply Templates Ends Document from the DCR --&gt;
+&lt;/xsl:stylesheet&gt;</XSL></Stylesheet></Component>
