@@ -23,7 +23,7 @@ src="/common/js/cookies.js"></script>
 >
 <title><xsl:text>$PAGE_SCOPE[title]</xsl:text></title>
          <!--  <xsl:text>$PAGE_HTML_HEAD_METADATA</xsl:text> --
-         <!-- Added By Balaveer for Metadata Starts-->
+         <!-- Added By  for Metadata Starts-->
          <xsl:if test="Keywords != ''">
           <xsl:value-of select="Keywords" disable-output-
 <script type="text/javascript"
@@ -33,7 +33,7 @@ src="/common/js/cookies.js"></script>
 src="/common/js/abSettings.js"></script>
 escaping="yes"/>
             </xsl:if>
-                <!-- Added By Balaveer for Metadata Ends-->
+                <!-- Added By  for Metadata Ends-->
          <script type="text/javascript">
                  <xsl:value-of select="GenericScript" disable-output-
 escaping="yes"/>
