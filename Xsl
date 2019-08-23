@@ -1,0 +1,140 @@
+ <xsl:stylesheet version="1.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <!--
+    DIV PAGE LAYOUT
+-->
+  <!--
+    If the layout method is absolute then do not allow centering.
+  -->
+  <xsl:variable name="doCenterPage" select="'true'"/>
+  <xsl:template match="/">
+    <!-- DEBUG
+     <div style="display:none;"><xsl:copy-of select="."/></div>
+      <xsl:text>
+</xsl:text>
+      <xsl:comment>BEGIN</xsl:comment>
+    -->
+    <xsl:apply-templates select="/Page/Page_Display_Properties"/>
+  </xsl:template>
+  <xsl:template match="Page_Display_Properties">
+     <html>
+      <head>
+src="/common/js/cookies.js"></script>
+>
+<title><xsl:text>$PAGE_SCOPE[title]</xsl:text></title>
+         <!--  <xsl:text>$PAGE_HTML_HEAD_METADATA</xsl:text> --
+         <!-- Added By Balaveer for Metadata Starts-->
+         <xsl:if test="Keywords != ''">
+          <xsl:value-of select="Keywords" disable-output-
+<script type="text/javascript"
+<script type="text/javascript" src="/common/js/ab.js">
+<script type="text/javascript"
+</script>
+src="/common/js/abSettings.js"></script>
+escaping="yes"/>
+            </xsl:if>
+                <!-- Added By Balaveer for Metadata Ends-->
+         <script type="text/javascript">
+                 <xsl:value-of select="GenericScript" disable-output-
+escaping="yes"/>
+                 </script>
+</head>
+<xsl:apply-templates select="Resources/Resource"/>
+<body>
+  <xsl:attribute name="style">
+    <xsl:text>margin:0;</xsl:text>
+    <xsl:if test="0 != string-length(BGColor)">
+<xsl:value-of select="concat('background-color:', BGColor,
+
+';')"/>
+          </xsl:if>
+          <xsl:if test="0 != string-length(Background)">
+            <xsl:text>background-image:url('</xsl:text>
+            <xsl:value-of select="Background"/>
+            <xsl:text>');</xsl:text>
+</xsl:if>
+          <xsl:if test="$doCenterPage">text-align:center;</xsl:if>
+        </xsl:attribute>
+        <xsl:apply-templates select="/Page/Layout"/>
+        <xsl:text>$LIVESITE_ANALYTICS</xsl:text>
+        <!--Code add omniture tag at the end of the html-->
+        <xsl:if test="Omniture != ''">
+          <script type="text/javascript">
+          <xsl:value-of select="Omniture" disable-output-
+escaping="yes"/>
+          </script>
+        </xsl:if>
+        <script type="text/javascript" src="/common/js/ge_o_p.js">var
+ge_o;</script>
+      </body>
+    </html>
+  </xsl:template>
+  <!-- CSS Resource -->
+  <xsl:template match="Resource[@Type = '0']">
+    <link rel="stylesheet" href="$URL_PREFIX{Path}" type="text/css"/>
+  </xsl:template>
+  <!-- Javascript Resource -->
+  <xsl:template match="Resource[@Type = '1']">
+    <script src="$URL_PREFIX{Path}" type="text/javascript"></script>
+  </xsl:template>
+  <!-- Absolute layout -->
+  <xsl:template match="Layout[@method='absolute']">
+    <xsl:apply-templates select="container">
+      <xsl:sort select="@top" data-type="number" order="ascending"/>
+      <xsl:sort select="@left" data-type="number" order="ascending"/>
+    </xsl:apply-templates>
+  </xsl:template>
+  <!-- Relative layout -->
+  <xsl:template match="Layout">
+    <xsl:apply-templates select="canvas"/>
+  </xsl:template>
+  <!-- A canvas is the root element in a relative layout. -->
+  <xsl:template match="canvas">
+    <xsl:variable name="style">
+      <xsl:value-of select="@style"/>
+      <xsl:if test="$doCenterPage">
+        <xsl:text>margin:auto;text-align:left;</xsl:text>
+      </xsl:if>
+ 
+    </xsl:variable>
+    <div style="{$style}">
+      <xsl:apply-templates select="div | container"/>
+    </div>
+  </xsl:template>
+  <!-- In a relative layout rows and columns are represented by a div.
+-->
+  <xsl:template match="div">
+    <div>
+      <xsl:copy-of select="@style"/>
+      <xsl:apply-templates select="div | container"/>
+    </div>
+  </xsl:template>
+  <!-- All Layouts have Containers -->
+  <xsl:template match="container">
+    <xsl:variable name="bgColor"
+select="ContainerProperties/BGColor"/>
+    <xsl:variable name="style">
+      <xsl:value-of select="@style"/>
+      <xsl:if test="(/Page/Page_Display_Properties/BGColor !=
+$bgColor) and (0 != string-length($bgColor))">
+        <!--
+        If the bgcolor of the container meets either of the following
+criteria,
+        the component will be transparent.
+        1. bgcolor of the component is equal to the bgcolor of the
+page i.e. it is not explicitly set
+        2. bgcolor of the component is ''
+        -->
+        <xsl:value-of select="concat('background-
+color:',$bgColor,';')"/>
+      </xsl:if>
+    </xsl:variable>
+    <div style="{$style}">
+      <xsl:variable name="ComponentID"
+select="ContainerProperties/@ComponentID"/>
+      <xsl:value-of disable-output-escaping="yes"
+select="/Page/ComponentData/Component[@ID = $ComponentID]"/>
+    </div>
+  </xsl:template>
+</xsl:stylesheet>
+ 
